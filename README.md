@@ -2,7 +2,7 @@
 
 The website for [Brindle](https://github.com/scmccart/brindle), a GPU-accelerated terminal emulator for Linux and Windows.
 
-Astro, React islands, Tailwind 4 and shadcn/ui, published to GitHub Pages at https://scmccart.github.io/brindle-site/.
+Astro, React islands, Tailwind 4 and shadcn/ui, deployed to Azure Static Web Apps at https://brindle.sh. Pull requests get a preview environment. See [docs/deploying.md](docs/deploying.md) for the Azure and DNS setup.
 
 ```sh
 npm ci

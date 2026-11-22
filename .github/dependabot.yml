@@ -1,0 +1,9 @@
+version: 2
+updates:
+  # Keeps SHA-pinned actions (such as Azure/static-web-apps-deploy) current.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
