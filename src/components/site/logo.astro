@@ -1,0 +1,34 @@
+---
+// A placeholder mark until the site uses Brindle's own icon (assets/ in the
+// Brindle repo).
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<svg viewBox="0 0 22 22" aria-hidden="true" class={className}>
+  <rect
+    x="1"
+    y="1"
+    width="20"
+    height="20"
+    rx="5"
+    class="fill-none stroke-primary"
+    stroke-width="2"
+  ></rect>
+  <path
+    d="M6 8l3.5 3L6 14"
+    class="fill-none stroke-primary"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+  <path
+    d="M11.5 15h4.5"
+    class="stroke-primary"
+    stroke-width="2"
+    stroke-linecap="round"
+  ></path>
+</svg>

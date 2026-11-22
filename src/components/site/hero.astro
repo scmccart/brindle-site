@@ -1,0 +1,54 @@
+---
+import { Download } from "lucide-react"
+
+import BrindleWindow from "@/components/site/brindle-window.astro"
+import { ThemePicker } from "@/components/site/theme-picker"
+import { TypedHeadline } from "@/components/site/typed-headline"
+import { release } from "@/data/release"
+---
+
+<section class="mx-auto max-w-[1200px] px-5 pt-[72px] pb-14 sm:px-10">
+  <TypedHeadline
+    client:load
+    className="m-0 max-w-[14ch] text-[clamp(44px,6.4vw,88px)] leading-[0.98] font-[650] tracking-[-0.042em]"
+  />
+  <p class="mt-8 max-w-[60ch] text-xl leading-[1.55]">
+    Brindle is a GPU-accelerated terminal emulator for Linux and Windows 11.
+    Programs keep running when you quit, remote tabs reconnect on their own, and
+    every tab shows when its program is working, done or waiting for you.
+  </p>
+  <div class="mt-10 flex flex-wrap gap-3">
+    <a
+      href={release.linux.url}
+      class="inline-flex h-[52px] items-center gap-2.5 rounded-[10px] bg-primary px-6 text-base font-semibold text-primary-foreground no-underline"
+    >
+      <Download className="size-[18px]" aria-hidden="true" />
+      Download for Linux
+    </a>
+    <a
+      href={release.windows.url}
+      class="inline-flex h-[52px] items-center gap-2.5 rounded-[10px] border border-border bg-card px-6 text-base font-semibold no-underline"
+    >
+      <Download className="size-[18px]" aria-hidden="true" />
+      Download for Windows
+    </a>
+  </div>
+  <p class="mt-4 text-sm leading-normal">
+    {`Version ${release.version}, released ${release.releasedOn}, for ${release.arch}. `}
+    <a href={release.releasesUrl}>All releases and checksums</a>
+  </p>
+</section>
+
+<section
+  class="mx-auto max-w-[1200px] px-5 sm:px-10"
+  aria-labelledby="hero-caption"
+>
+  <BrindleWindow />
+  <div class="mt-7 flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
+    <p class="m-0 max-w-[46ch] text-[15px] leading-normal">
+      Five themes come built in. Pick one and this page switches to it: the site
+      uses the same colours Brindle exports.
+    </p>
+    <ThemePicker client:load />
+  </div>
+</section>

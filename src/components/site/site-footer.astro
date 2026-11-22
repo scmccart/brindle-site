@@ -1,0 +1,25 @@
+---
+import { release } from "@/data/release"
+
+const links = [
+  { href: release.repo, label: "Source" },
+  { href: release.releasesUrl, label: "Releases" },
+  { href: release.changelogUrl, label: "Changelog" },
+  { href: release.issuesUrl, label: "Report a problem" },
+]
+---
+
+<footer class="border-t border-border">
+  <div class="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-x-8 gap-y-4 px-5 pt-8 pb-10 text-sm leading-normal sm:px-10">
+    <p class="m-0">
+      Brindle is open source under the MIT or Apache 2.0 licence.
+    </p>
+    <nav aria-label="Project" class="flex flex-wrap gap-x-6 gap-y-2">
+      {links.map((link) => (
+        <a href={link.href} class="inline-flex min-h-11 items-center">
+          {link.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</footer>

@@ -1,0 +1,196 @@
+---
+import { TriangleAlert } from "lucide-react"
+
+import Logo from "@/components/site/logo.astro"
+
+const prompt = "text-terminal-ansi-4"
+
+// Tabs as Brindle draws them: an OSC 7501 status dot before the title, an
+// OSC 9;4 progress bar along the bottom edge, an OSC 3008 badge after it.
+const tabs = [
+  { title: "claude", dot: "bg-terminal-ansi-3", active: true },
+  {
+    title: "cargo build",
+    dot: "bg-muted-foreground",
+    progress: "w-[62%] bg-muted-foreground",
+  },
+  { title: "photos", dot: "bg-terminal-ansi-2" },
+  {
+    title: "brew",
+    dot: "bg-terminal-ansi-1",
+    progress: "w-[35%] bg-terminal-ansi-1",
+  },
+  { title: "bash", root: true },
+]
+---
+
+<section class="mx-auto max-w-[1200px] px-5 pt-[clamp(88px,12vw,160px)] sm:px-10">
+  <h2 class="m-0 max-w-[20ch] text-[clamp(30px,5vw,40px)] leading-[1.08] font-[650] tracking-[-0.03em]">
+    See what every tab is doing, even the ones behind
+  </h2>
+  <p class="mt-6 max-w-[60ch] text-lg leading-relaxed">
+    Brindle reads the escape sequences shells and tools already send, so it
+    knows where each command starts, whether it failed, and when a program needs
+    you.
+  </p>
+
+  <div class="mt-14 grid grid-cols-[minmax(0,1fr)] gap-14 min-[1000px]:grid-cols-3 min-[1000px]:gap-10">
+    <div>
+      <div
+        aria-hidden="true"
+        class="h-[220px] overflow-hidden rounded-xl border border-border bg-terminal-background py-3.5 pr-3.5 font-mono text-[13px] leading-[22px] text-terminal-foreground"
+      >
+        <div class="flex">
+          <span class="mr-[11px] w-[3px] flex-none"></span>
+          <span class="whitespace-pre">
+            <span class={prompt}>~/src/brindle</span> $ cargo fmt --check
+          </span>
+        </div>
+        <div class="flex">
+          <span class="mr-[11px] w-[3px] flex-none bg-terminal-ansi-1"></span>
+          <span class="whitespace-pre">
+            <span class={prompt}>~/src/brindle</span> $ cargo test -q
+          </span>
+        </div>
+        <div class="flex">
+          <span class="mr-[11px] w-[3px] flex-none"></span>
+          <span class="whitespace-pre">
+            test result: <span class="text-terminal-ansi-1">FAILED</span>. 211
+            passed; 1 failed
+          </span>
+        </div>
+        <div class="flex h-[22px]"></div>
+        <div class="flex bg-terminal-selection">
+          <span class="mr-[11px] w-[3px] flex-none"></span>
+          <span class="whitespace-pre">
+            <span class={prompt}>~/src/brindle</span> $ cargo test -q zones
+          </span>
+        </div>
+        <div class="flex">
+          <span class="mr-[11px] w-[3px] flex-none"></span>
+          <span class="whitespace-pre">
+            test result: <span class="text-terminal-ansi-2">ok</span>. 48
+            passed; 0 failed
+          </span>
+        </div>
+        <div class="flex">
+          <span class="mr-[11px] w-[3px] flex-none"></span>
+          <span class="whitespace-pre">
+            <span class={prompt}>~/src/brindle</span> ${" "}
+            <span class="inline-block h-[17px] w-2 bg-terminal-cursor align-[-3px] motion-safe:animate-blink"></span>
+          </span>
+        </div>
+      </div>
+      <h3 class="mt-6 text-lg font-semibold tracking-[-0.01em]">
+        Shell integration
+      </h3>
+      <p class="mt-2.5 text-base leading-relaxed">
+        A red bar marks commands that failed. Jump between prompts with
+        ctrl-shift-up and ctrl-shift-down, and copy the last command or its
+        output from the command palette. Reads OSC 133 and VS Code's OSC 633.
+      </p>
+      <figure class="mt-4">
+        <figcaption class="sr-only">
+          Shell integration setup for bash
+        </figcaption>
+        <pre
+          tabindex="0"
+          class="m-0 rounded-lg bg-muted px-3.5 py-3 font-mono text-[13px] leading-[1.6] whitespace-pre-wrap"
+        >eval "$(brindle --shell-integration bash)"</pre>
+      </figure>
+      <p class="mt-2.5 text-sm leading-normal">
+        Scripts for bash, zsh, fish and PowerShell. You add the line yourself;
+        Brindle never edits your startup files.
+      </p>
+    </div>
+
+    <div>
+      <div
+        aria-hidden="true"
+        class="flex h-[220px] flex-col gap-1 rounded-xl border border-border bg-background p-2.5 text-[13.5px] text-terminal-foreground"
+      >
+        {tabs.map((tab) => (
+          <div
+            class:list={[
+              "relative flex h-9 min-w-0 items-center gap-[7px] overflow-hidden rounded-md px-3 whitespace-nowrap",
+              tab.active
+                ? "bg-tab-active font-semibold"
+                : "bg-terminal-background",
+            ]}
+          >
+            <span class:list={["size-[7px] flex-none rounded-full", tab.dot]} />
+            <span class:list={["truncate", !tab.active && "opacity-60"]}>
+              {tab.title}
+            </span>
+            {tab.root && (
+              <TriangleAlert
+                className="size-3.5 flex-none text-terminal-ansi-3"
+                strokeWidth={2.2}
+              />
+            )}
+            {tab.progress && (
+              <span
+                class:list={["absolute bottom-0 left-0 h-0.5", tab.progress]}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+      <h3 class="mt-6 text-lg font-semibold tracking-[-0.01em]">
+        Status, progress and context on every tab
+      </h3>
+      <p class="mt-2.5 text-base leading-relaxed">
+        Programs that speak the Program Status Protocol, such as Claude Code,
+        put a dot on their tab: yellow when they're waiting for you, red when
+        they fail, green when they're done.
+      </p>
+      <p class="mt-2.5 text-base leading-relaxed">
+        OSC 9;4 progress draws a thin bar along the bottom of the tab, and a
+        shell started with <code class="font-mono text-sm">run0</code> gets a
+        warning badge, with a "Running as root" tooltip, for as long as it runs
+        as root.
+      </p>
+    </div>
+
+    <div>
+      <div
+        aria-hidden="true"
+        class="flex h-[220px] items-center justify-center rounded-xl bg-muted p-5"
+      >
+        <div class="w-full max-w-[340px] overflow-hidden rounded-[14px] border border-border bg-popover text-popover-foreground shadow-[0_20px_50px_-24px_rgba(0,0,0,0.55)]">
+          <div class="flex gap-3 px-4 pt-4 pb-3.5">
+            <Logo class="size-8 flex-none" />
+            <div class="min-w-0 text-sm">
+              <div class="font-semibold">deploy — ops</div>
+              <div class="mt-[3px] leading-[1.45]">
+                Migrate the staging database now?
+              </div>
+            </div>
+          </div>
+          <div class="flex border-t border-border text-sm font-semibold">
+            <span class="flex-1 py-3 text-center">Migrate</span>
+            <span class="flex-1 border-l border-border py-3 text-center">
+              Skip
+            </span>
+          </div>
+        </div>
+      </div>
+      <h3 class="mt-6 text-lg font-semibold tracking-[-0.01em]">
+        Notifications you can answer
+      </h3>
+      <p class="mt-2.5 text-base leading-relaxed">
+        A bell, OSC 9, OSC 777, kitty's OSC 99, or a program that's waiting,
+        done or failed raises a notification when you can't see its tab. Click
+        it to go to that tab.
+      </p>
+      <p class="mt-2.5 text-base leading-relaxed">
+        With OSC 99, a program can add up to four buttons, and Brindle tells it
+        which one you pressed.
+      </p>
+      <p class="mt-2.5 text-sm leading-normal">
+        Toasts on Windows. On Linux, buttons and click-through need a desktop
+        whose notifications support actions.
+      </p>
+    </div>
+  </div>
+</section>
