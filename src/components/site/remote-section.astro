@@ -1,13 +1,13 @@
 ---
-const config = [
-  "[[profiles]]",
-  'name = "build host"',
-  'remote = { type = "ssh", host = "builder", connect_at_launch = true }',
-  "",
-  "[[profiles]]",
-  'name = "dev container"',
-  'remote = { type = "container", engine = "podman", container = "my-devbox" }',
-]
+import { highlightToml, tokensToHtml } from "@/lib/highlight-toml"
+
+const config = await highlightToml(`[[profiles]]
+name = "build host"
+remote = { type = "ssh", host = "builder", connect_at_launch = true }
+
+[[profiles]]
+name = "dev container"
+remote = { type = "container", engine = "podman", container = "my-devbox" }`)
 
 // A sequence: what happens when a remote connection drops.
 const steps = [
@@ -36,11 +36,8 @@ const steps = [
       <pre
         tabindex="0"
         class="m-0 overflow-x-auto rounded-xl border border-border bg-terminal-background px-[26px] py-6 font-mono text-sm leading-[1.7] text-terminal-foreground"
-      >{
-          config.map((line) =>
-            line.startsWith("[[") ? <b>{line}</b> : line
-          ).flatMap((node, i) => (i === 0 ? [node] : ["\n", node]))
-        }</pre>
+        set:html={tokensToHtml(config)}
+      />
     </figure>
     <div>
       <h2 class="m-0 text-[clamp(30px,5vw,40px)] leading-[1.08] font-[650] tracking-[-0.03em]">
