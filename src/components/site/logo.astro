@@ -1,34 +1,71 @@
 ---
-// A placeholder mark until the site uses Brindle's own icon (assets/ in the
-// Brindle repo).
+// Brindle's icon (assets/brindle.svg in the Brindle repo), redrawn in the
+// page's theme: the tile takes the terminal background, the coat the primary
+// colour, so it matches the real icon in the Brindle themes and follows the
+// others. public/favicon.svg is the original, unthemed.
 interface Props {
   class?: string
 }
 
 const { class: className } = Astro.props
+
+// Gradient ids must be unique per instance; a counter keeps builds stable.
+const counter = globalThis as { __brindleLogos?: number }
+counter.__brindleLogos = (counter.__brindleLogos ?? 0) + 1
+const id = `brindle-logo-${counter.__brindleLogos}`
 ---
 
-<svg viewBox="0 0 22 22" aria-hidden="true" class={className}>
+<svg viewBox="20 20 472 472" aria-hidden="true" class={className}>
+  <defs>
+    <linearGradient id={`${id}-tile`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color: var(--terminal-background)"></stop>
+      <stop
+        offset="1"
+        style="stop-color: color-mix(in oklab, var(--terminal-background) 75%, var(--background))"
+      ></stop>
+    </linearGradient>
+    <linearGradient
+      id={`${id}-coat`}
+      gradientUnits="userSpaceOnUse"
+      x1="0"
+      y1="125"
+      x2="0"
+      y2="375"
+    >
+      <stop
+        offset="0"
+        style="stop-color: color-mix(in oklab, var(--primary) 80%, var(--terminal-foreground))"
+      ></stop>
+      <stop offset="0.55" style="stop-color: var(--primary)"></stop>
+      <stop
+        offset="1"
+        style="stop-color: color-mix(in oklab, var(--primary) 85%, var(--terminal-background))"
+      ></stop>
+    </linearGradient>
+  </defs>
   <rect
-    x="1"
-    y="1"
-    width="20"
-    height="20"
-    rx="5"
-    class="fill-none stroke-primary"
-    stroke-width="2"
+    x="32"
+    y="32"
+    width="448"
+    height="448"
+    rx="100"
+    fill={`url(#${id}-tile)`}
+    class="stroke-border"
+    stroke-width="20"
   ></rect>
-  <path
-    d="M6 8l3.5 3L6 14"
-    class="fill-none stroke-primary"
-    stroke-width="2"
+  <g
+    fill="none"
+    stroke={`url(#${id}-coat)`}
+    stroke-width="24"
     stroke-linecap="round"
     stroke-linejoin="round"
-  ></path>
-  <path
-    d="M11.5 15h4.5"
-    class="stroke-primary"
-    stroke-width="2"
-    stroke-linecap="round"
-  ></path>
+  >
+    <path d="M90 247 L 97.5 192 C 101.2 166, 114.2 147, 140.4 145 L 256 145 L 371.6 145 C 397.8 147, 410.8 166, 414.5 192 L 422 247"></path>
+    <path d="M182 249 L 188 332 C 190 356, 204 370, 228 370 L 284 370 C 308 370, 322 356, 324 332 L 330 249"></path>
+  </g>
+  <g fill={`url(#${id}-coat)`}>
+    <circle cx="214" cy="206" r="13"></circle>
+    <circle cx="298" cy="206" r="13"></circle>
+    <path d="M226.0 318 C 226.0 310, 234.0 308, 256 308 C 278.0 308, 286.0 310, 286.0 318 C 286.0 327.1, 268.0 348, 256 348 C 244.0 348, 226.0 327.1, 226.0 318 Z"></path>
+  </g>
 </svg>
