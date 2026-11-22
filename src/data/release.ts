@@ -44,6 +44,14 @@ export const release = {
   },
 } as const
 
+// The Brindle commit (on origin/main) whose specs the site's copy was last
+// checked against. The brindle-changes skill diffs from here; bump it in the
+// same commit that brings the site up to date.
+export const syncedWith = {
+  commit: "a62a6c177ea00e23e3a343aca830c27cbb6957ec",
+  date: "2026-11-22",
+} as const
+
 // The built-in themes, in the order Brindle lists them. Their colours come
 // from src/styles/brindle-tokens.css through [data-theme] rules.
 export const themes = [
