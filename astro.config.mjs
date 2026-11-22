@@ -6,8 +6,7 @@ import react from "@astrojs/react"
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://scmccart.github.io",
-  base: "/brindle-site",
+  site: "https://brindle.sh",
   vite: {
     plugins: [tailwindcss()],
   },
