@@ -1,0 +1,92 @@
+---
+import { Search } from "lucide-react"
+
+// The Attach Session palette, drawn on the popover tokens like the command
+// palette in the app.
+const groups = [
+  {
+    host: "This machine",
+    rows: [
+      {
+        title: "cargo watch",
+        dir: "~/src/brindle",
+        age: "12 min",
+        selected: true,
+      },
+      { title: "rsync", dir: "~/photos", age: "2 h" },
+    ],
+  },
+  { host: "builder", rows: [{ title: "nightly.sh", dir: "~/ci", age: "3 d" }] },
+  { host: "my-devbox", status: "Connecting", rows: [] },
+]
+---
+
+<section
+  id="features"
+  class="mx-auto max-w-[1200px] px-5 pt-[clamp(88px,12vw,160px)] sm:px-10"
+>
+  <div class="grid grid-cols-[minmax(0,1fr)] items-center gap-8 min-[900px]:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] min-[900px]:gap-16">
+    <div>
+      <h2 class="m-0 text-[clamp(30px,5vw,40px)] leading-[1.08] font-[650] tracking-[-0.03em]">
+        Pick up where you left off
+      </h2>
+      <p class="mt-6 max-w-[56ch] text-lg leading-relaxed">
+        Every tab runs in Brindle's terminal server, so quitting, a crash or an
+        upgrade leaves its programs running. The next launch puts each one back
+        in its zone, with its screen and scrollback.
+      </p>
+      <p class="mt-4 max-w-[56ch] text-lg leading-relaxed">
+        To pick one up by hand, Attach Session in the command palette lists
+        every detached session, on this machine and on the hosts you're
+        connected to.
+      </p>
+    </div>
+    <div
+      aria-hidden="true"
+      class="flex justify-center rounded-xl border border-border bg-terminal-background px-6 py-10"
+    >
+      <div class="w-full max-w-[400px] overflow-hidden rounded-lg border border-border bg-popover text-[13px] text-popover-foreground shadow-[0_18px_40px_-16px_rgba(0,0,0,0.5)]">
+        <div class="flex h-9 items-center gap-2 border-b border-border px-2.5">
+          <Search
+            className="size-3.5 text-muted-foreground"
+            strokeWidth={2.4}
+          />
+          <span class="text-muted-foreground">Attach a session…</span>
+        </div>
+        <div class="p-1">
+          {groups.map((group, i) => (
+            <>
+              <div
+                class:list={[
+                  "px-2 pb-1 text-xs font-medium text-muted-foreground",
+                  i === 0 ? "pt-2" : "pt-2.5",
+                ]}
+              >
+                {group.host}
+              </div>
+              {group.rows.map((row) => (
+                <div
+                  class:list={[
+                    "flex justify-between gap-4 rounded-[5px] px-2 py-[7px]",
+                    row.selected && "bg-accent text-accent-foreground",
+                  ]}
+                >
+                  <span>
+                    {row.title}{" "}
+                    <span class="text-muted-foreground">{row.dir}</span>
+                  </span>
+                  <span class="text-muted-foreground">{row.age}</span>
+                </div>
+              ))}
+              {group.status && (
+                <div class="px-2 pt-[7px] pb-2 text-muted-foreground">
+                  {group.status}
+                </div>
+              )}
+            </>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

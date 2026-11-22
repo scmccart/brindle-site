@@ -1,0 +1,38 @@
+---
+import type { Line } from "@/data/hero-terminal"
+
+interface Props {
+  lines: Line[]
+}
+
+const { lines } = Astro.props
+---
+
+<div class="py-2.5 pr-3 pb-3.5">
+  {lines.map((line) => (
+    <div class="flex h-5">
+      <span
+        class:list={[
+          "mr-[11px] w-[3px] flex-none",
+          line.failed && "bg-terminal-ansi-1",
+        ]}
+      />
+      <span class="flex min-w-0 overflow-hidden">
+        {line.segs.map((seg) => (
+          <span
+            class:list={[
+              "flex-none whitespace-pre",
+              seg.c,
+              seg.bold && "font-bold",
+            ]}
+          >
+            {seg.t}
+          </span>
+        ))}
+        {line.cursor && (
+          <span class="mt-px h-[18px] w-2 flex-none bg-terminal-cursor motion-safe:animate-blink" />
+        )}
+      </span>
+    </div>
+  ))}
+</div>

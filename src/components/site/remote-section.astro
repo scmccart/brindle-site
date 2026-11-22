@@ -1,0 +1,71 @@
+---
+const config = [
+  "[[profiles]]",
+  'name = "build host"',
+  'remote = { type = "ssh", host = "builder", connect_at_launch = true }',
+  "",
+  "[[profiles]]",
+  'name = "dev container"',
+  'remote = { type = "container", engine = "podman", container = "my-devbox" }',
+]
+
+// A sequence: what happens when a remote connection drops.
+const steps = [
+  {
+    title: "The connection drops",
+    body: "Brindle notices a silent connection within about half a minute, and the host's tabs say it was lost and why.",
+  },
+  {
+    title: "Brindle keeps trying",
+    body: "It reconnects for as long as a tab uses the host, waiting at most 30 seconds between attempts. You can keep typing.",
+  },
+  {
+    title: "Everything comes back",
+    body: "Each tab gets its screen back with the same program still running, and what you typed meanwhile is sent.",
+  },
+]
+---
+
+<section class="mx-auto max-w-[1200px] px-5 pt-[clamp(88px,12vw,160px)] sm:px-10">
+  <div class="grid grid-cols-[minmax(0,1fr)] items-center gap-8 min-[900px]:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] min-[900px]:gap-16">
+    <figure class="m-0 max-[899px]:order-last">
+      <figcaption class="mb-2.5 text-sm">
+        Two profiles in{" "}
+        <code class="font-mono text-[13px]">~/.config/brindle/config.toml</code>
+      </figcaption>
+      <pre
+        tabindex="0"
+        class="m-0 overflow-x-auto rounded-xl border border-border bg-terminal-background px-[26px] py-6 font-mono text-sm leading-[1.7] text-terminal-foreground"
+      >{
+          config.map((line) =>
+            line.startsWith("[[") ? <b>{line}</b> : line
+          ).flatMap((node, i) => (i === 0 ? [node] : ["\n", node]))
+        }</pre>
+    </figure>
+    <div>
+      <h2 class="m-0 text-[clamp(30px,5vw,40px)] leading-[1.08] font-[650] tracking-[-0.03em]">
+        Remote tabs that behave like local ones
+      </h2>
+      <p class="mt-6 max-w-[56ch] text-lg leading-relaxed">
+        Point a profile at a Linux host over SSH, or at a Docker or Podman
+        container that's already running. Brindle draws the terminal on your
+        machine while the programs run in the host's own terminal server, so
+        titles, directories, notifications and status dots work as they do
+        locally. Connections use your OpenSSH config, agent and host keys.
+      </p>
+    </div>
+  </div>
+  <ol class="m-0 mt-14 grid list-none gap-6 p-0 min-[700px]:grid-cols-3">
+    {steps.map((step, i) => (
+      <li
+        class:list={[
+          "border-t-2 pt-[18px]",
+          i === steps.length - 1 ? "border-primary" : "border-border",
+        ]}
+      >
+        <h3 class="m-0 text-lg font-semibold">{step.title}</h3>
+        <p class="mt-2.5 text-base leading-relaxed">{step.body}</p>
+      </li>
+    ))}
+  </ol>
+</section>

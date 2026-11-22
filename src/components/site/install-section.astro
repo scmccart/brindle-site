@@ -1,0 +1,15 @@
+---
+import { InstallTabs } from "@/components/site/install-tabs"
+---
+
+<section
+  id="install"
+  class="mx-auto max-w-[1200px] px-5 pt-[clamp(88px,12vw,160px)] pb-[clamp(88px,11vw,140px)] sm:px-10"
+>
+  <div class="grid grid-cols-[minmax(0,1fr)] gap-8 min-[900px]:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] min-[900px]:gap-16">
+    <h2 class="m-0 text-[clamp(30px,5vw,40px)] leading-[1.08] font-[650] tracking-[-0.03em]">
+      Install
+    </h2>
+    <InstallTabs client:visible />
+  </div>
+</section>

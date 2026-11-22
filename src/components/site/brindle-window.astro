@@ -1,0 +1,75 @@
+---
+import { ChevronDown, Minus, Plus, Square, X } from "lucide-react"
+
+import TerminalLines from "@/components/site/terminal-lines.astro"
+import ZoneHeader from "@/components/site/zone-header.astro"
+import { leftZone, rightZone } from "@/data/hero-terminal"
+
+// A mock Brindle window, drawn to match the app: the tab strip and the gaps
+// between zones on the window background, each zone a card in its terminal's
+// colours. See the tabs and zones specs in the Brindle repo.
+const tabFace =
+  "flex h-6 min-w-0 items-center gap-[7px] rounded-md px-2.5 whitespace-nowrap"
+const zoneCard =
+  "min-w-0 overflow-hidden rounded-[7px] border border-zone-edge bg-terminal-background text-terminal-foreground"
+---
+
+<figure class="m-0">
+  <figcaption id="hero-caption" class="sr-only">
+    A Brindle window with three tabs, in the selected theme. The active tab is
+    split into two zones: on the left, tests pass and a clippy run fails, with a
+    red bar beside its prompt; on the right, cargo watch reruns the tests. The
+    other tabs show a program waiting for you and a build in progress.
+  </figcaption>
+  <div
+    aria-hidden="true"
+    class="overflow-hidden rounded-[14px] border border-border bg-background shadow-[0_40px_90px_-40px_rgba(0,0,0,0.55)]"
+  >
+    <div class="flex h-9 items-center gap-1 pt-1.5 pl-1.5 text-[12.5px] text-terminal-foreground">
+      <div class:list={[tabFace, "bg-terminal-background"]}>
+        <span class="size-1.5 flex-none rounded-full bg-terminal-ansi-3"></span>
+        <span class="truncate opacity-60">claude</span>
+      </div>
+      <div
+        class:list={[
+          tabFace,
+          "gap-2 bg-tab-active pr-2 font-semibold shadow-[0_1px_3px_rgba(0,0,0,0.35)]",
+        ]}
+      >
+        <span class="truncate">bash</span>
+        <X className="size-3 flex-none" strokeWidth={2.4} />
+      </div>
+      <div
+        class:list={[
+          tabFace,
+          "relative overflow-hidden bg-terminal-background max-[520px]:hidden",
+        ]}
+      >
+        <span class="size-1.5 flex-none rounded-full bg-muted-foreground"></span>
+        <span class="truncate opacity-60">cargo build</span>
+        <span class="absolute bottom-0 left-0 h-0.5 w-[55%] bg-muted-foreground"></span>
+      </div>
+      <Plus className="ml-1.5 size-3.5 flex-none opacity-80" strokeWidth={2} />
+      <ChevronDown
+        className="ml-1 size-3.5 flex-none opacity-80"
+        strokeWidth={2}
+      />
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-5 px-4 opacity-85 max-[520px]:hidden">
+        <Minus className="size-3.5" strokeWidth={2} />
+        <Square className="size-3.5" strokeWidth={2} />
+        <X className="size-3.5" strokeWidth={2} />
+      </div>
+    </div>
+    <div class="flex flex-col gap-1.5 p-1.5 font-mono text-[13px] leading-5 md:flex-row">
+      <div class:list={[zoneCard, "md:flex-[1.4_1_0] ring-[1.5px] ring-ring"]}>
+        <ZoneHeader title="bash" active />
+        <TerminalLines lines={leftZone} />
+      </div>
+      <div class:list={[zoneCard, "md:flex-[1_1_0] max-md:hidden"]}>
+        <ZoneHeader title="cargo" />
+        <TerminalLines lines={rightZone} />
+      </div>
+    </div>
+  </div>
+</figure>

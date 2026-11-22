@@ -1,0 +1,19 @@
+---
+import { Columns2, Rows2, X } from "lucide-react"
+
+interface Props {
+  title: string
+  active?: boolean
+}
+
+const { title, active = false } = Astro.props
+---
+
+<div class="flex h-[26px] items-center gap-2 pr-2 pl-2.5 font-sans text-xs">
+  <span class:list={["flex-1 truncate", !active && "opacity-60"]}>{title}</span>
+  <span class="flex gap-2.5 opacity-60">
+    <Columns2 className="size-3" strokeWidth={2.2} />
+    <Rows2 className="size-3" strokeWidth={2.2} />
+    <X className="size-3" strokeWidth={2.2} />
+  </span>
+</div>

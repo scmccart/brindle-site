@@ -2,13 +2,26 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
 @import "./brindle-tokens.css";
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+    --animate-blink: blink 1.1s steps(1) infinite;
+    @keyframes blink {
+        50% { opacity: 0; }
+    }
+}
+
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Inter Variable', sans-serif;
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+    /* Brindle's chrome, derived from the terminal tokens: the active tab's
+       face and the zone cards' edge. */
+    --color-tab-active: color-mix(in srgb, var(--terminal-foreground) 12%, var(--terminal-background));
+    --color-zone-edge: color-mix(in srgb, var(--terminal-foreground) 12%, var(--terminal-background));
     --color-ring: var(--ring);
     --color-input: var(--input);
     --color-border: var(--border);
@@ -63,5 +76,9 @@
     }
   html {
     @apply font-sans;
+    }
+  /* Brindle draws text without ligatures; so do its mock-ups. */
+  code, pre, .font-mono {
+    font-variant-ligatures: none;
     }
 }
