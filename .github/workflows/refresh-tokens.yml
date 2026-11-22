@@ -24,6 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           tag=$(gh release view -R scmccart/brindle --json tagName --jq .tagName)
+          [[ "$tag" =~ ^v?[0-9A-Za-z._-]+$ ]] || { echo "Unexpected tag: $tag"; exit 1; }
           if ! gh release download "$tag" -R scmccart/brindle -p brindle-ui-tokens.css -D "$RUNNER_TEMP" --clobber; then
             echo "Release $tag has no brindle-ui-tokens.css yet; nothing to do."
             exit 0
@@ -32,19 +33,21 @@ jobs:
           cp "$RUNNER_TEMP/brindle-ui-tokens.css" src/styles/brindle-tokens.css
       - name: Open a PR when they differ
         if: steps.fetch.outputs.tag != ''
+        env:
+          TAG: ${{ steps.fetch.outputs.tag }}
         run: |
           set -euo pipefail
           if git diff --quiet -- src/styles/brindle-tokens.css; then
             echo "Tokens are up to date."
             exit 0
           fi
-          branch="chore/tokens-${{ steps.fetch.outputs.tag }}"
+          branch="chore/tokens-$TAG"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$branch"
-          git commit -am "chore(tokens): refresh brindle ui tokens from ${{ steps.fetch.outputs.tag }}"
+          git commit -am "chore(tokens): refresh brindle ui tokens from $TAG"
           git push --force-with-lease origin "$branch"
           gh pr create --base main --head "$branch" \
-            --title "chore(tokens): refresh brindle ui tokens from ${{ steps.fetch.outputs.tag }}" \
-            --body "Regenerated from the \`brindle-ui-tokens.css\` asset of Brindle ${{ steps.fetch.outputs.tag }}." \
+            --title "chore(tokens): refresh brindle ui tokens from $TAG" \
+            --body "Regenerated from the \`brindle-ui-tokens.css\` asset of Brindle $TAG." \
             || echo "A PR for $branch already exists."
